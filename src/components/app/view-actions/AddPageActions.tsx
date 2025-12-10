@@ -69,13 +69,6 @@ function AddPageActions({ view }: { view: View }) {
           void handleAddPage(ViewLayout.Calendar, 'New Calendar');
         },
       },
-      {
-        label: t('chat.newChat'),
-        icon: <ViewIcon layout={ViewLayout.AIChat} size={'small'} />,
-        onSelect: () => {
-          void handleAddPage(ViewLayout.AIChat);
-        },
-      },
     ],
     [handleAddPage, t]
   );
@@ -86,7 +79,6 @@ function AddPageActions({ view }: { view: View }) {
         <DropdownMenuItem
           key={action.label}
           data-testid={
-            action.label === t('chat.newChat') ? 'add-ai-chat-button' :
             action.label === t('grid.menuName') ? 'add-grid-button' : undefined
           }
           disabled={action.disabled}
