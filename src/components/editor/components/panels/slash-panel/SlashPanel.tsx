@@ -26,12 +26,12 @@ import {
 // import { ReactComponent as AIWriterIcon } from '@/assets/slash_menu_icon_ai_writer.svg';
 import { ReactComponent as EmojiIcon } from '@/assets/icons/add_emoji.svg';
 import { ReactComponent as AddPageIcon } from '@/assets/icons/add_to_page.svg';
-import { ReactComponent as AskAIIcon } from '@/assets/icons/ai.svg';
+// import { ReactComponent as AskAIIcon } from '@/assets/icons/ai.svg';
 import { ReactComponent as BoardIcon } from '@/assets/icons/board.svg';
 import { ReactComponent as BulletedListIcon } from '@/assets/icons/bulleted_list.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg';
 import { ReactComponent as CalloutIcon } from '@/assets/icons/callout.svg';
-import { ReactComponent as ContinueWritingIcon } from '@/assets/icons/continue_writing.svg';
+// import { ReactComponent as ContinueWritingIcon } from '@/assets/icons/continue_writing.svg';
 import { ReactComponent as DividerIcon } from '@/assets/icons/divider.svg';
 import { ReactComponent as OutlineIcon } from '@/assets/icons/doc.svg';
 import { ReactComponent as FileIcon } from '@/assets/icons/file.svg';
@@ -57,7 +57,7 @@ import { notify } from '@/components/_shared/notify';
 import { flattenViews } from '@/components/_shared/outline/utils';
 import { calculateOptimalOrigins, Popover } from '@/components/_shared/popover';
 import PageIcon from '@/components/_shared/view-icon/PageIcon';
-import { useAIWriter } from '@/components/chat';
+// import { useAIWriter } from '@/components/chat';
 import { SearchInput } from '@/components/chat/components/ui/search-input';
 import { usePopoverContext } from '@/components/editor/components/block-popover/BlockPopoverContext';
 import { createDatabaseNodeData } from '@/components/editor/components/blocks/database/utils/databaseBlockUtils';
@@ -68,7 +68,7 @@ import { useEditorContext } from '@/components/editor/EditorContext';
 import { Button as OutlineButton } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { getCharacters } from '@/utils/word';
+// import { getCharacters } from '@/utils/word';
 
 type DatabaseOption = {
   databaseId: string;
@@ -228,37 +228,6 @@ export function SlashPanel({
     }
   }, [documentId, loadViewMeta, open]);
 
-  const getBeforeContent = useCallback(() => {
-    const { selection } = editor;
-
-    if (!selection) return '';
-
-    const start = {
-      path: [0],
-      offset: 0,
-    };
-
-    const end = editor.end(selection);
-
-    const moreContext = getMoreAIContext?.();
-
-    return (
-      viewName +
-      '\n' +
-      (moreContext ? `More context: ${moreContext} \n` : '') +
-      CustomEditor.getSelectionContent(editor, {
-        anchor: start,
-        focus: end,
-      })
-    );
-  }, [editor, viewName, getMoreAIContext]);
-
-  const chars = useMemo(() => {
-    if (!open) return 0;
-
-    return getCharacters(getBeforeContent());
-  }, [open, getBeforeContent]);
-
   const blockTypeByLayout = useCallback((layout: ViewLayout) => {
     switch (layout) {
       case ViewLayout.Grid:
@@ -342,8 +311,6 @@ export function SlashPanel({
   }, [databaseOutline, allowedDatabaseIds, databaseSearch]);
 
   const { openPanel } = usePanelContext();
-
-  const { askAIAnything, continueWriting } = useAIWriter();
 
   const loadDatabasesForPicker = useCallback(async () => {
     if (!loadViews) return false;
@@ -590,29 +557,6 @@ export function SlashPanel({
     onClick?: () => void;
   }[] = useMemo(() => {
     return [
-      {
-        label: t('document.slashMenu.name.askAIAnything'),
-        key: 'askAIAnything',
-        icon: <AskAIIcon />,
-        keywords: ['ai', 'writer', 'ask', 'anything', 'askAIAnything', 'askai'],
-        onClick: () => {
-          const content = getBeforeContent();
-
-          askAIAnything(content);
-        },
-      },
-      {
-        label: t('document.slashMenu.name.continueWriting'),
-        key: 'continueWriting',
-        disabled: chars < 2,
-        icon: <ContinueWritingIcon />,
-        keywords: ['ai', 'writing', 'continue'],
-        onClick: () => {
-          const content = getBeforeContent();
-
-          void continueWriting(content);
-        },
-      },
       {
         label: t('document.slashMenu.name.text'),
         key: 'text',
@@ -1086,10 +1030,6 @@ export function SlashPanel({
     });
   }, [
     t,
-    chars,
-    getBeforeContent,
-    askAIAnything,
-    continueWriting,
     turnInto,
     openPanel,
     documentId,
